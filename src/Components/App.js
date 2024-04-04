@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import TaskList from './TaskList'; 
 import './App.css';
+import { runConfettiAnimation } from './confetti'; 
+import TaskForm from './TaskForm';
 
 const App = () => {
     const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem('tasks')) || []);
@@ -11,12 +13,11 @@ const App = () => {
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }, [tasks]);
 
-    const addTask = (e) => {
-        e.preventDefault();
-        if (!input.trim()) return;
-        setTasks([...tasks, { id: Date.now(), text: input, completed: false }]);
-        setInput('');
-    };
+    const handleAddTask = (text) => {
+      if (!text.trim()) return;
+      const newTask = { id: Date.now(), text, completed: false };
+      setTasks([...tasks, newTask]);
+  };
 
     const toggleTask = (id) => {
         setTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
@@ -36,15 +37,7 @@ const App = () => {
     return (
         <div>
             <h1>Todo List</h1>
-            <form data-cy="task-form" onSubmit={addTask}>
-                <input
-                    data-cy="task-input"
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                />
-                <button data-cy="add-task-btn" type="submit">Add Task</button>
-            </form>
+            <TaskForm onAddTask={handleAddTask} />
             <div>
                 <button data-cy="filter-btn-all" onClick={() => setFilter('all')}>Toutes</button>
                 <button data-cy="filter-btn-undone" onClick={() => setFilter('active')}>Non complétées</button>
