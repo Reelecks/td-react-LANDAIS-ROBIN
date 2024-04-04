@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TaskList from './TaskList'; // Renommé de TodoList à TaskList
+import TaskList from './TaskList'; 
 import './App.css';
 
 const App = () => {
